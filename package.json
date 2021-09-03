@@ -1,0 +1,22 @@
+{
+  "name": "@erickwendel/tdd-frontend-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --runInBand --config ./jest.config.mjs",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules npx jest --runInBand --watchAll  --config ./jest.config.mjs",
+    "test:cov": "NODE_OPTIONS=--experimental-vm-modules npx jest --runInBand --no-cache --config jest.config.mjs --coverage",
+    "start": "npx http-server"
+  },
+  "keywords": [],
+  "author": "erickwendel",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^27.1.0"
+  },
+  "dependencies": {
+    "http-server": "^13.0.1"
+  }
+}
