@@ -9,7 +9,7 @@ export default class App {
 
     async initialize() {
         this.configureButton()
-        return this.readCharactersFromAPI()
+        return this.updateTableWithCharactersFromAPI()
     }
 
     configureButton() {
@@ -41,7 +41,7 @@ export default class App {
         this.cleanNameInput()
     }
 
-    async readCharactersFromAPI() {
+    async updateTableWithCharactersFromAPI() {
         const { results } = await (await fetch(this.apiUrl)).json()
         for (const { name } of results) {
             this.updateTable(name)

@@ -12,6 +12,7 @@ describe('#App', () => {
     beforeEach(() => {
         jest.spyOn(document, document.getElementById.name).mockReturnValue(elementObj)
     })
+    
     describe('#isNameValid should validate if name has value', () => {
         test('given an empty name it should return false', () => {
             const appInstance = new App({})
@@ -39,7 +40,7 @@ describe('#App', () => {
         <tr>
             <td>ErickWendel</td>
         </tr>
-        `.replace(/\s/g, '') // remove os espaços, só para facilitar ver o html melhor aqui
+        `.replace(/\s/g, '') // remove os espaços, só para facilitar ver melhor aqui o html aqui no teste
 
         // repare que o zézin foi inserido por ultimo, na nossa logica, o ultimo sempre fica em primeiro
         // por isso ele está em primeiro
@@ -57,7 +58,7 @@ describe('#App', () => {
             const appInstance = new App({})
             jest.spyOn(appInstance, appInstance.updateTable.name).mockImplementation(() => { })
             jest.spyOn(appInstance, appInstance.cleanNameInput.name).mockImplementation(() => { })
-            
+
 
             appInstance.name.value = 'Erick Wendel'
             appInstance.onButtonClick()
@@ -68,11 +69,11 @@ describe('#App', () => {
 
         test('#onButtonClick should show alert message if name is invalid', () => {
             const appInstance = new App({})
-            
+
             jest.spyOn(window, "alert").mockImplementation(() => { })
             jest.spyOn(appInstance, appInstance.updateTable.name).mockImplementation(() => { })
             jest.spyOn(appInstance, appInstance.cleanNameInput.name).mockImplementation(() => { })
-            
+
 
             appInstance.name.value = ''
             appInstance.onButtonClick()
@@ -99,6 +100,58 @@ describe('#App', () => {
     })
 
 
-    test.todo('#readCharactersFromAPI should show get only names from results')
-    test.todo('#initialize should call configureButton and readCharactersFromAPI')
+    test('#updateTableWithCharactersFromAPI should show get only names from results', async () => {
+        const apiUrl = 'https://hello-test-api.com'
+        const appInstance = new App({ apiUrl })
+        jest.spyOn(appInstance, appInstance.updateTable.name).mockReturnValue()
+
+        const mockAPIResponse = {
+            "info": {
+                "count": 671,
+                "pages": 34,
+                "next": "https://rickandmortyapi.com/api/character?page=2",
+                "prev": null
+            },
+            "results": [{
+                "id": 1,
+                "name": "Rick Sanchez",
+                "status": "Alive",
+                "species": "Human",
+                "type": "",
+                "gender": "Male",
+                "origin": {
+                    "name": "Earth (C-137)",
+                    "url": "https://rickandmortyapi.com/api/location/1"
+                },
+                "location": {
+                    "name": "Earth (Replacement Dimension)",
+                    "url": "https://rickandmortyapi.com/api/location/20"
+                },
+                "image": "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+                "episode": ["https://rickandmortyapi.com/api/episode/1"],
+                "url": "https://rickandmortyapi.com/api/character/1",
+                "created": "2017-11-04T18:48:46.250Z"
+            }]
+        }
+
+        global.fetch = jest.fn()
+            .mockResolvedValue({ json: async () => mockAPIResponse });
+
+        await appInstance.updateTableWithCharactersFromAPI()
+        
+        expect(global.fetch).toHaveBeenCalledWith(apiUrl)
+        expect(appInstance.updateTable).toHaveBeenCalledWith("Rick Sanchez")
+    })
+
+    test('#initialize should call configureButton and updateTableWithCharactersFromAPI', async () => {
+        const appInstance = new App({})
+        jest.spyOn(appInstance, appInstance.updateTableWithCharactersFromAPI.name).mockResolvedValue()
+        jest.spyOn(appInstance, appInstance.configureButton.name).mockResolvedValue()
+
+        await appInstance.initialize()
+
+        expect(appInstance.configureButton).toHaveBeenCalled()
+        expect(appInstance.updateTableWithCharactersFromAPI).toHaveBeenCalled()
+
+    })
 })
